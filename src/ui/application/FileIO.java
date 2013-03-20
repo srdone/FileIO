@@ -23,7 +23,7 @@ public class FileIO {
 	/*
 	 * Creates the menu and produces the actions requested by the user.
 	 */
-	private void runApp() {
+	public void runApp() {
 		switch(getMenuResponse()) {
 		case ENTER: enterText(); break;
 		case SAVE: saveFile(); break;
@@ -38,15 +38,15 @@ public class FileIO {
 	 */
 	private MenuOptions getMenuResponse() {
 		writeMenu();
-		String response = getUserResponse();
+		String response = Model.getUserResponse();
 		return processResponse(response);
 	}
 	
 	/*
 	 * Take lines of text until there is a blank line.
 	 */
-	private void enterText() {
-		String line;
+	public void enterText() {
+		String line = "";
 		while(!line.equals("")) {
 			line = requestLineOfText();
 			model.addText(line);
@@ -56,48 +56,61 @@ public class FileIO {
 	
 	private String requestLineOfText() {
 		System.out.println(Model.REQUEST_LINE_OF_TEXT_TEXT);
-		//TODO
-		return null;
+		return Model.getUserResponse();
 	}
 
 	/*
 	 * Take save text in model to a file specified by the user.
 	 */
-	private void saveFile() {
-		String filename = 
+	public void saveFile() {
+		String filename = getSaveFileName();
 		model.saveFile(filename);
 		runApp();
 	}
 	
 	/*
+	 * Ask the user for the name of the file they want to open
+	 */
+	private String getSaveFileName() {
+		System.out.println(Model.REQUEST_SAVE_FILE_NAME_TEXT);
+		return Model.getUserResponse();
+	}
+
+	/*
 	 * Read the contents of a file into the model
 	 */
-	private void readFile() {
-		//TODO
+	public void readFile() {
+		String filename = getReadFileName();
+		if(model.readFile(filename)) {
+			System.out.println(Model.READ_FILE_SUCCESSFUL_TEXT);
+		} else {
+			System.out.println(Model.READ_FILE_FAILED_TEXT);
+		}
 		runApp();
+	}
+	
+	/*
+	 * Ask the user what they want to save the file as.
+	 */
+	private String getReadFileName() {
+		System.out.println(Model.REQUEST_READ_FILE_NAME_TEXT);
+		return Model.getUserResponse();
 	}
 	
 	/*
 	 * Exit the application
 	 */
-	private void quit() {
-		//TODO
-		runApp();
+	public void quit() {
+		System.out.println(Model.QUIT_TEXT);
+		System.exit(0);
 	}
 	
 	/*
 	 * Print text letting the user know that they entered an invalid response.
 	 */
 	private void notAValidResponse() {
-		printInvalidResponseText();
-		runApp();
-	}
-	
-	/*
-	 * Print the invalid response text
-	 */
-	private void printInvalidResponseText() {
 		System.out.println(Model.INVALID_RESPONSE_TEXT);
+		runApp();
 	}
 	
 	/*
@@ -109,7 +122,7 @@ public class FileIO {
 	}
 	
 	/*
-	 * Print the text preceeding the actual menu options.
+	 * Print the text preceding the actual menu options.
 	 */
 	private void printWelcomeText() {
 		System.out.println(Model.WELCOME_TEXT);
@@ -122,13 +135,6 @@ public class FileIO {
 		for(MenuOptions option : MenuOptions.values()) {
 		System.out.println(option.getMenuName());
 		}
-	}
-	
-	/*
-	 * Allow the user to respond in the console and read that response.
-	 */
-	private String getUserResponse() {
-		//TODO
 	}
 	
 	/*
