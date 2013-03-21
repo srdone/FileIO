@@ -1,7 +1,15 @@
 package ui.application;
 
+import java.io.Console;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Scanner;
+
 import model.Model;
 import enums.MenuOptions;
+import filehandlers.Reader;
+import filehandlers.Writer;
 
 /*
  * Creates the main interface for the application, consisting of a menu that offers the user four choices:
@@ -11,13 +19,17 @@ import enums.MenuOptions;
  * (Q)uit
  */
 public class FileIO {
-	Model model = new Model();
+	Model model;
+	Reader r;
+	Writer w;
 	
 	/*
 	 * Initialize and launch menu
 	 */
 	public FileIO() {
-		
+		model = new Model();
+		r = new Reader(model);
+		w = new Writer(model);
 	}
 	
 	/*
@@ -38,7 +50,7 @@ public class FileIO {
 	 */
 	private MenuOptions getMenuResponse() {
 		writeMenu();
-		String response = Model.getUserResponse();
+		String response = getUserResponse();
 		return processResponse(response);
 	}
 	
@@ -49,42 +61,45 @@ public class FileIO {
 		String line = "";
 		while(!line.equals("")) {
 			line = requestLineOfText();
-			model.addText(line);
+			model.addTextToFileBuffer(line);
 		}
 		runApp();
 	}
 	
 	private String requestLineOfText() {
 		System.out.println(Model.REQUEST_LINE_OF_TEXT_TEXT);
-		return Model.getUserResponse();
+		return getUserResponse();
 	}
 
 	/*
 	 * Take save text in model to a file specified by the user.
 	 */
 	public void saveFile() {
-		String filename = getSaveFileName();
-		model.saveFile(filename);
+		String filename = getFileName();
+		try {
+			File file = createFile(filename);
+			model.setCurrentFile(file);
+			w.save();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 		runApp();
-	}
-	
-	/*
-	 * Ask the user for the name of the file they want to open
-	 */
-	private String getSaveFileName() {
-		System.out.println(Model.REQUEST_SAVE_FILE_NAME_TEXT);
-		return Model.getUserResponse();
 	}
 
 	/*
 	 * Read the contents of a file into the model
 	 */
 	public void readFile() {
-		String filename = getReadFileName();
-		if(model.readFile(filename)) {
-			System.out.println(Model.READ_FILE_SUCCESSFUL_TEXT);
-		} else {
-			System.out.println(Model.READ_FILE_FAILED_TEXT);
+		String filename = getFileName();
+		try {
+			model.setCurrentFile(createFile(filename));
+			r.read();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		runApp();
 	}
@@ -92,9 +107,9 @@ public class FileIO {
 	/*
 	 * Ask the user what they want to save the file as.
 	 */
-	private String getReadFileName() {
-		System.out.println(Model.REQUEST_READ_FILE_NAME_TEXT);
-		return Model.getUserResponse();
+	private String getFileName() {
+		System.out.println(Model.REQUEST_FILE_NAME_TEXT);
+		return getUserResponse();
 	}
 	
 	/*
@@ -142,6 +157,37 @@ public class FileIO {
 	 */
 	public MenuOptions processResponse(String response) {
 		return MenuOptions.getMatchingOption(response.charAt(0));
+	}
+	
+	/*
+	 * Create the directories and the file specified by filename
+	 * Does not write anything to the file
+	 */
+	private File createFile(String filename) throws InvocationTargetException{
+		// TODO Auto-generated method stub
+		//Create new file
+		File myFile = new File(filename);
+		//Save the file
+		try {
+			File directoryFile = myFile.getParentFile();
+			//Create directories
+			if(directoryFile != null) {
+				directoryFile.mkdirs();
+			}
+			myFile.createNewFile();
+		} catch (IOException e) {
+			throw new InvocationTargetException(e);
+		}
+		return myFile;
+	}
+	
+	/*
+	 * Static method to read input from the user, in this case through the console.
+	 */
+	public String getUserResponse() {
+		Scanner scan = new Scanner(System.in);
+		String s = scan.nextLine();
+		return s;
 	}
 
 }
