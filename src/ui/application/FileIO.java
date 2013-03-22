@@ -22,6 +22,7 @@ public class FileIO {
 	Model model;
 	Reader r;
 	Writer w;
+	Scanner scan;
 	
 	/*
 	 * Initialize and launch menu
@@ -30,6 +31,7 @@ public class FileIO {
 		model = new Model();
 		r = new Reader(model);
 		w = new Writer(model);
+		scan = new Scanner(System.in);
 	}
 	
 	/*
@@ -58,11 +60,12 @@ public class FileIO {
 	 * Take lines of text until there is a blank line.
 	 */
 	public void enterText() {
-		String line = "";
-		while(!line.equals("")) {
-			line = requestLineOfText();
+		while(true) {
+			String line = requestLineOfText();
+			if(line.equals("")) break;
 			model.addTextToFileBuffer(line);
 		}
+		System.out.println(Model.INPUT_COMPLETE_TEXT);
 		runApp();
 	}
 	
@@ -117,6 +120,7 @@ public class FileIO {
 	 */
 	public void quit() {
 		System.out.println(Model.QUIT_TEXT);
+		scan.close();
 		System.exit(0);
 	}
 	
@@ -185,7 +189,6 @@ public class FileIO {
 	 * Static method to read input from the user, in this case through the console.
 	 */
 	public String getUserResponse() {
-		Scanner scan = new Scanner(System.in);
 		String s = scan.nextLine();
 		return s;
 	}

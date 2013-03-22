@@ -19,17 +19,14 @@ public class Model {
 	private File currentFile;
 
 	public static final String INVALID_RESPONSE_TEXT = "That was not a valid response. Please enter (E), (S), (R), or (Q).";
-	public static final String WELCOME_TEXT = "Welcome to FileIO. Please choose an option: " +
-			"(E)nter Text\n" +
-			"(S)ave File\n" +
-			"(R)ead File\n" +
-			"(Q)uit\n";
-	public static final String REQUEST_LINE_OF_TEXT_TEXT = null;
-	public static final String REQUEST_SAVE_FILE_NAME_TEXT = null;
-	public static final String REQUEST_FILE_NAME_TEXT = null;
-	public static final String READ_FILE_SUCCESSFUL_TEXT = null;
-	public static final String READ_FILE_FAILED_TEXT = null;
-	public static final String QUIT_TEXT = null;
+	public static final String WELCOME_TEXT = "Welcome to FileIO. Please choose an option: ";
+	public static final String REQUEST_LINE_OF_TEXT_TEXT = "Please enter text to be saved in file. \n" +
+			"When you are done, hit enter without typing text on the blank line.";
+	public static final String REQUEST_FILE_NAME_TEXT = "Please enter the name of your file.";
+	public static final String READ_FILE_SUCCESSFUL_TEXT = "The file was successfully read.";
+	public static final String READ_FILE_FAILED_TEXT = "The file read failed.";
+	public static final String QUIT_TEXT = "Thank you for using FileIO. Exiting.";
+	public static final String INPUT_COMPLETE_TEXT = "File Input Complete";
 	
 	/*
 	 * Constructor - instantiates the fileBuffer, the writer, and the reader.
