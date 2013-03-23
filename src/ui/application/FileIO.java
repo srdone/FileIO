@@ -79,15 +79,9 @@ public class FileIO {
 	 */
 	public void saveFile() {
 		String filename = getFileName();
-		try {
 			File file = createFile(filename);
 			model.setCurrentFile(file);
 			w.save();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
 		runApp();
 	}
 
@@ -96,15 +90,22 @@ public class FileIO {
 	 */
 	public void readFile() {
 		String filename = getFileName();
-		try {
-			model.setCurrentFile(createFile(filename));
-			r.read();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+		File file = createFile(filename);
+		if(!(file == null)) {
+			//If the file creation is successful
+			model.setCurrentFile(file);
+			//Read the file, then take action on whether it was readable or not.
+			if(r.read()) {
+				runApp();
+			} else {
+				System.out.println(Model.UNABLE_TO_READ_FILE);
+				runApp();
+			}
+		} else {
+			//What to do if the file creation failed
+			System.out.println(Model.UNABLE_TO_CREATE_FILE);
+			runApp();
 		}
-		runApp();
 	}
 	
 	/*
@@ -167,7 +168,7 @@ public class FileIO {
 	 * Create the directories and the file specified by filename
 	 * Does not write anything to the file
 	 */
-	private File createFile(String filename) throws InvocationTargetException{
+	private File createFile(String filename) {
 		// TODO Auto-generated method stub
 		//Create new file
 		File myFile = new File(filename);
@@ -180,7 +181,8 @@ public class FileIO {
 			}
 			myFile.createNewFile();
 		} catch (IOException e) {
-			throw new InvocationTargetException(e);
+			System.out.println(e.getMessage());
+			return null;
 		}
 		return myFile;
 	}

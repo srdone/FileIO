@@ -27,6 +27,8 @@ public class Model {
 	public static final String READ_FILE_FAILED_TEXT = "The file read failed.";
 	public static final String QUIT_TEXT = "Thank you for using FileIO. Exiting.";
 	public static final String INPUT_COMPLETE_TEXT = "File Input Complete";
+	public static final String UNABLE_TO_CREATE_FILE = "Cannot read file.";
+	public static final String UNABLE_TO_READ_FILE = "Cannot read file.";
 	
 	/*
 	 * Constructor - instantiates the fileBuffer, the writer, and the reader.

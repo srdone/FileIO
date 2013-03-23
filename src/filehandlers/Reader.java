@@ -28,13 +28,21 @@ public class Reader {
 	 * @return Returns an ArrayList<String> with the data read from the file
 	 * @throws InvocationTargetException 
 	 */
-	public ArrayList<String> read() throws InvocationTargetException {
+	public boolean read() {
 		// TODO Auto-generated method stub
 		ArrayList<String> fileBuffer = new ArrayList<String>();
-		fileBuffer = readFile();
-		return fileBuffer;
+		try{
+			fileBuffer = readFile();
+		} catch (InvocationTargetException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+		return true;
 	}
 
+	/*
+	 * Reads the currentFile from model into an ArrayList, and returns that arrayList.
+	 */
 	private ArrayList<String> readFile() throws InvocationTargetException {
 		FileReader fReader;
 		BufferedReader bReader;
